@@ -57,6 +57,8 @@ cap = cv.VideoCapture(f"{video_file_name}.mp4")
 #a altura é 60 caracteres
 print("Renderizando...")
 video_ascii = []
+
+t1 = time.time()
 for frame_idx in range(int(cap.get(cv.CAP_PROP_FRAME_COUNT))):
 
     ret, frame = cap.read()
@@ -92,6 +94,9 @@ for frame_idx in range(int(cap.get(cv.CAP_PROP_FRAME_COUNT))):
             
         frame_processado.append(linha_de_pixels)
     video_ascii.append(frame_processado)
+t2 = time.time()
+print(f"Levou {t2-t1} Segundos para processar SEM o NUMBA")
+
 
 lista_de_frames = []
 for frame_do_video_ascii in video_ascii:
