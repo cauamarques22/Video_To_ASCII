@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#VIDEO_TO_ASCII V1
-=======
 #VIDEO TO ASCII V2
->>>>>>> video_ascii_v2
 import cv2 as cv
 import time
 from numba import njit
@@ -59,16 +55,6 @@ while True:
         print("Não foi encontrado o arquivo informado! Certifique-se de que seu Arquivo é do tipo MP4")
 
 cap = cv.VideoCapture(f"{video_file_name}.mp4") 
-<<<<<<< HEAD
-#a largura do meu terminal é 237 caracteres.
-#a altura é 60 caracteres
-print("Renderizando...")
-video_ascii = []
-
-t1 = time.time()
-for frame_idx in range(int(cap.get(cv.CAP_PROP_FRAME_COUNT))):
-=======
->>>>>>> video_ascii_v2
 
 print("Renderizando...")
 
@@ -101,14 +87,7 @@ def processar_pixels(frame_array):
             elif luminance >= 0:
                 linha_de_pixels.append(".")
         frame_processado.append(linha_de_pixels)
-<<<<<<< HEAD
-    video_ascii.append(frame_processado)
-t2 = time.time()
-print(f"Levou {t2-t1} Segundos para processar SEM o NUMBA")
-
-=======
     return frame_processado
->>>>>>> video_ascii_v2
 
 #t1 = time.time() #APENAS PARA DEBUG
 video_ascii = []
@@ -148,9 +127,3 @@ if choice == "2":
 for frame in returned_frame_builder:
     print(frame)
     time.sleep(0.0333)
-<<<<<<< HEAD
-
-
-#caralhoooooo
-=======
->>>>>>> video_ascii_v2
