@@ -120,3 +120,4 @@ for frame in lista_de_frames:
     time.sleep(0.0333)
 
 
+#aqui vai ser diferente
