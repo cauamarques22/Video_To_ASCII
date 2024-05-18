@@ -1,0 +1,4 @@
+Atualmente trabalhando na implementação do NUMBA @njit no outro branch. 
+Esse arquivo master esta com um erro de index na linha 107, tem que voltar pra corrigir.
+
+A diferença de velocidade é gritante, essa versão levou 32.12 segundos para efetuar o processamento dos frames. Enquanto a v2 do outro branch, fez em 3 segundos.
