@@ -1,6 +1,8 @@
+#VIDEO TO ASCII V2
 import cv2 as cv
 import time
-from numba import njit
+import numpy as np
+from numba import njit,jit
 
 print("Você deseja renderizar um vídeo, ou ler um video já renderizado?")
 choice = input("1 - Renderizar video\n2 - Ler video renderizado\n")
@@ -58,9 +60,8 @@ cap = cv.VideoCapture(f"{video_file_name}.mp4")
 #a altura é 60 caracteres
 print("Renderizando...")
 
-
 @njit
-def processar_frames(frame_array):
+def processar_pixels(frame_array):
     frame_processado = []
     for height in range(60):
 
@@ -93,41 +94,46 @@ def processar_frames(frame_array):
         frame_processado.append(linha_de_pixels)
     return frame_processado
 
-
 t1 = time.time()
 video_ascii = []
 for frame_idx in range(int(cap.get(cv.CAP_PROP_FRAME_COUNT))):
 
     ret, frame = cap.read()
     resized_frames = cv.resize(frame, (212,60)) 
-    video_ascii.append(processar_frames(resized_frames))
+    video_ascii.append(processar_pixels(resized_frames))
 t2 = time.time()
-print(f"Levou {t2-t1} segundos para processar a tarefa com NUMBA NJIT")
+print(f"processar_pixels {t2-t1} segundos para processar a tarefa com NUMBA NJIT")
+print("LEN:")
+print(len(video_ascii), len(video_ascii[0]),)
 
-input()
-lista_de_frames = []
-for frame_do_video_ascii in video_ascii:
-    
-    frame_renderizado = ""
-    for altura in range(60):
-        for pixel in range(212):
-            frame_renderizado += frame_do_video_ascii[altura][pixel]
-        frame_renderizado+="\n"
-    lista_de_frames.append(frame_renderizado)
+def text_frame_builder():
+    rendered_frames = []
+    for frame_do_video_ascii in video_ascii:
+        frame_renderizado = ""
+        for altura in range(60):
+            for pixel in range(212):
+                frame_renderizado += frame_do_video_ascii[altura][pixel] #TÁ DANDO ERRO AQUI
+            frame_renderizado+="\n"
+        rendered_frames.append(frame_renderizado) 
+    return rendered_frames
+
 
 txt_file = open(f"{video_file_name}.txt", "w")
-
-for frame in lista_de_frames:
+t1 = time.time()
+returned_func_array = text_frame_builder()
+for frame in returned_func_array:
     txt_file.write(frame)
 txt_file.close()
+t2 = time.time()
+print(f"text_frame_builder levou {t2-t1} segundos para processar a tarefa com NUMBA NJIT")
 
 print("Deseja exibir o video?")
 choice = input("\n1 - Sim\n2 - Não\n")
 if choice == "2":
     print("O arquivo estará renderizado para que você possa executá-lo")
-    SystemExit
+    raise SystemExit
 
-for frame in lista_de_frames:
+for frame in returned_func_array():
     print(frame)
     time.sleep(0.0333)
 
