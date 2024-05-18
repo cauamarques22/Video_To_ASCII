@@ -1,5 +1,6 @@
 import cv2 as cv
 import time
+from numba import njit
 
 print("Você deseja renderizar um vídeo, ou ler um video já renderizado?")
 choice = input("1 - Renderizar video\n2 - Ler video renderizado\n")
@@ -56,18 +57,17 @@ cap = cv.VideoCapture(f"{video_file_name}.mp4")
 #a largura do meu terminal é 237 caracteres.
 #a altura é 60 caracteres
 print("Renderizando...")
-video_ascii = []
-for frame_idx in range(int(cap.get(cv.CAP_PROP_FRAME_COUNT))):
 
-    ret, frame = cap.read()
-    resized_frames = cv.resize(frame, (212,60)) 
+
+@njit
+def processar_frames(frame_array):
     frame_processado = []
     for height in range(60):
 
         linha_de_pixels = []
         for width in range(212):
             
-            b,g,r = resized_frames[height][width]
+            b,g,r = frame_array[height][width]
             luminance = round((0.299*r) + (0.587*g) + (0.114*b))
     if luminance > 250:
         linha_de_pixels.append("$")
@@ -91,8 +91,20 @@ for frame_idx in range(int(cap.get(cv.CAP_PROP_FRAME_COUNT))):
         linha_de_pixels.append(".")
             
         frame_processado.append(linha_de_pixels)
-    video_ascii.append(frame_processado)
+    return frame_processado
 
+
+t1 = time.time()
+video_ascii = []
+for frame_idx in range(int(cap.get(cv.CAP_PROP_FRAME_COUNT))):
+
+    ret, frame = cap.read()
+    resized_frames = cv.resize(frame, (212,60)) 
+    video_ascii.append(processar_frames(resized_frames))
+t2 = time.time()
+print(f"Levou {t2-t1} segundos para processar a tarefa com NUMBA NJIT")
+
+input()
 lista_de_frames = []
 for frame_do_video_ascii in video_ascii:
     
