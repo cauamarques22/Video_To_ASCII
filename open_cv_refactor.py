@@ -131,7 +131,7 @@ for frame in lista_de_frames:
 
     # kw = {
     #     'vmin': frame.min(),
-    #     'vmax': frame.max(),
+    #     'vmax': frame.max(),###
     #     'levels': np.linspace(frame.min(), frame.max(), 10),
     # }
 
